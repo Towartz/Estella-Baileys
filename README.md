@@ -10,6 +10,8 @@
 
 <div align='center'>A modified WhatsApp WebSockets library with extended features: LID/JID resolution, interactive buttons, list messages, status sending, and more.</div>
 
+<img width="1820" height="1024" alt="image" src="https://github.com/user-attachments/assets/3084528d-1ede-4e3f-870c-7ee1b37d30d7" />
+
 <p align='center'>
   <img src='https://github-readme-stats.vercel.app/api?username=Towartz&show_icons=true&theme=tokyonight' width='48%' />
   <img src='https://github-readme-stats.vercel.app/api/top-langs/?username=Towartz&hide=css,html&theme=tokyonight&layout=compact' width='48%' />
