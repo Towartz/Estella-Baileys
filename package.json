@@ -1,5 +1,5 @@
 {
-  "name": "baileys",
+  "name": "estella-baileys",
   "type": "module",
   "version": "7.0.0-rc.9",
   "description": "A WebSockets library for interacting with WhatsApp Web",
@@ -13,7 +13,7 @@
     "url": "https://github.com/Towartz/Estella-Baileys.git"
   },
   "license": "MIT",
-  "author": "Rajeh Taher",
+  "author": "Towartz",
   "main": "lib/index.js",
   "files": [
     "lib/**/*",

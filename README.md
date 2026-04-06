@@ -2,9 +2,9 @@
 
 <div align='center'>
 
-[![npm version](https://img.shields.io/npm/v/@towartz/baileys.svg?style=flat-square)](https://www.npmjs.com/package/@towartz/baileys)
-[![npm downloads](https://img.shields.io/npm/dt/@towartz/baileys?style=flat-square)](https://www.npmjs.com/package/@towartz/baileys)
-[![license](https://img.shields.io/npm/l/@towartz/baileys?style=flat-square)](https://github.com/Towartz/Estella-Baileys/blob/main/LICENSE)
+[![npm version](https://img.shields.io/npm/v/estella-baileys.svg?style=flat-square)](https://www.npmjs.com/package/estella-baileys)
+[![npm downloads](https://img.shields.io/npm/dt/estella-baileys?style=flat-square)](https://www.npmjs.com/package/estella-baileys)
+[![license](https://img.shields.io/npm/l/estella-baileys?style=flat-square)](https://github.com/Towartz/Estella-Baileys/blob/main/LICENSE)
 
 </div>
 
@@ -36,11 +36,11 @@
 ## Install
 
 ```bash
-npm install @towartz/baileys
+npm install estella-baileys
 # or
-yarn add @towartz/baileys
+yarn add estella-baileys
 # or
-pnpm add @towartz/baileys
+pnpm add estella-baileys
 ```
 
 > **Requires Node.js >= 20.0.0**
@@ -50,7 +50,7 @@ pnpm add @towartz/baileys
 ### Connect with QR Code
 
 ```ts
-import makeWASocket, { DisconnectReason, useMultiFileAuthState } from '@towartz/baileys'
+import makeWASocket, { DisconnectReason, useMultiFileAuthState } from 'estella-baileys'
 import { Boom } from '@hapi/boom'
 
 const { state, saveCreds } = await useMultiFileAuthState('auth_info')
@@ -170,7 +170,7 @@ setAuroraBlockReadReceipts(false)
 ### LID/JID Utilities
 
 ```ts
-import { lidToJid, jidToLid, getBotJid, isJidUser } from '@towartz/baileys'
+import { lidToJid, jidToLid, getBotJid, isJidUser } from 'estella-baileys'
 
 // Convert LID to phone JID
 const phoneJid = lidToJid('1234567890@lid')
