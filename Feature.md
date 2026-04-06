@@ -1,32 +1,32 @@
 # Feature.md — Baileys v10 Wileys Enterprise Changes
 
-> Berdasarkan `git diff` antara commit master dan versi yang telah di-patch (custom-baileys v10).
+> Based on `git diff` between master commit and the patched version (custom-baileys v10).
 
 ---
 
 ## 1. WAProto Refresh
 
-### Versi WhatsApp Web
-- Lama: `2.3000.1029496320`
-- Baru: `2.3000.1036692702`
+### WhatsApp Web Version
+- Old: `2.3000.1029496320`
+- New: `2.3000.1036692702`
 
 ---
 
-### 1.1 Pesan Baru di Message (Type-Level)
+### 1.1 New Message Fields (Type-Level)
 
-| Field ID | Message Type | Keterangan |
+| Field ID | Message Type | Description |
 |----------|-------------|-----------|
-| `115` (pergeseran dari 114) | `PollResultSnapshotMessage` | Replaced (field number shift) |
-| `116` | `FutureProofMessage newsletterAdminProfileMessage` | Profil admin newsletter |
-| `117` | `FutureProofMessage newsletterAdminProfileMessageV2` | Profil admin newsletter v2 |
-| `118` | `FutureProofMessage spoilerMessage` | Pesan dengan konten tersembunyi (spoiler) |
-| `119` | `PollCreationMessage pollCreationMessageV6` | Poll lanjutan dengan endTime, hideParticipantName, allowAddOption |
-| `120` | `ConditionalRevealMessage` | Pesan reveal bersyarat (enkripsi, scheduled message) |
-| `121` | `PollAddOptionMessage` | Menambah opsi ke poll yang sudah ada |
-| `122` | `EventInviteMessage` | Undangan event (eventId, title, startTime, thumbnail, caption) |
-| `123` | `GroupRootKeyShare` | Kunci root grup untuk enkripsi grup |
+| `115` (shifted from 114) | `PollResultSnapshotMessage` | Replaced (field number shift) |
+| `116` | `FutureProofMessage newsletterAdminProfileMessage` | Newsletter admin profile |
+| `117` | `FutureProofMessage newsletterAdminProfileMessageV2` | Newsletter admin profile v2 |
+| `118` | `FutureProofMessage spoilerMessage` | Message with hidden content (spoiler) |
+| `119` | `PollCreationMessage pollCreationMessageV6` | Advanced poll with endTime, hideParticipantName, allowAddOption |
+| `120` | `ConditionalRevealMessage` | Conditional reveal message (encryption, scheduled message) |
+| `121` | `PollAddOptionMessage` | Add option to existing poll |
+| `122` | `EventInviteMessage` | Event invitation (eventId, title, startTime, thumbnail, caption) |
+| `123` | `GroupRootKeyShare` | Group root key for group encryption |
 
-### 1.2 Message Baru (Top-Level Message Baru)
+### 1.2 New Messages (Top-Level Messages)
 
 #### EventInviteMessage
 ```proto
@@ -90,7 +90,7 @@ message AIMediaCollectionMetadata {
 
 #### Bot Command & Agent & Document & Group
 ```proto
-// Perintah bot
+// Bot command
 message BotCommandMetadata {
     optional string commandName = 1;
     optional string commandDescription = 2;
@@ -105,7 +105,7 @@ message BotAgentMetadata {
     optional BotAgentDeepLinkMetadata deepLinkMetadata = 1;
 }
 
-// Plugin dokumen: text extraction dan OCR
+// Document plugin: text extraction and OCR
 message BotDocumentMessageMetadata {
     optional DocumentPluginType pluginType = 1;
     enum DocumentPluginType {
@@ -114,7 +114,7 @@ message BotDocumentMessageMetadata {
     }
 }
 
-// Group bot — AI bots dalam grup
+// Group bot — AI bots in groups
 message BotGroupMetadata {
     repeated BotGroupParticipantMetadata participantsMetadata = 1;
 }
@@ -155,7 +155,7 @@ message InlineContact {
 }
 ```
 
-#### MediaDomainInfo (Enum terpisah — menggantikan Message.MediaKeyDomain lama)
+#### MediaDomainInfo (Separate Enum — replaces old Message.MediaKeyDomain)
 ```proto
 message MediaDomainInfo {
     optional MediaKeyDomain mediaKeyDomain = 1;
@@ -168,34 +168,34 @@ enum MediaKeyDomain {
 }
 ```
 
-### 1.3 Field Baru pada Message Internal
+### 1.3 New Fields on Internal Messages
 
-#### AudioMessage — field `mediaKeyDomain` DIHAPUS (line 23)
-#### DocumentMessage — field `mediaKeyDomain` DIHAPUS (line 22)
-Migrasi ke konteks baru via `MediaDomainInfo` di ContextInfo.
+#### AudioMessage — field `mediaKeyDomain` REMOVED (line 23)
+#### DocumentMessage — field `mediaKeyDomain` REMOVED (line 22)
+Migrated to new context via `MediaDomainInfo` in ContextInfo.
 
-#### ImageMessage — field `mediaKeyDomain` DIHAPUS (line 33)
-#### StickerMessage — field `mediaKeyDomain` DIHAPUS (line 23)
-#### MMSThumbnailMetadata — field `mediaKeyDomain` DIHAPUS (line 8)
-#### VideoMessage — field `mediaKeyDomain` DIHAPUS (line 32)
+#### ImageMessage — field `mediaKeyDomain` REMOVED (line 33)
+#### StickerMessage — field `mediaKeyDomain` REMOVED (line 23)
+#### MMSThumbnailMetadata — field `mediaKeyDomain` REMOVED (line 8)
+#### VideoMessage — field `mediaKeyDomain` REMOVED (line 32)
 
-Dulu menggunakan `Message.MediaKeyDomain` enum lokal (UNSET, E2EE_CHAT, STATUS, CAPI, BOT).
-Sekarang enum dipindah ke top-level `MediaKeyDomain` dengan naming berbeda.
+Previously used `Message.MediaKeyDomain` local enum (UNSET, E2EE_CHAT, STATUS, CAPI, BOT).
+Now moved to top-level `MediaKeyDomain` with different naming.
 
 #### Call Message
 ```proto
-optional MessageContextInfo messageContextInfo = 10;  // BARU
-optional uint32 callEntryPoint = 11;  // BARU
+optional MessageContextInfo messageContextInfo = 10;  // NEW
+optional uint32 callEntryPoint = 11;  // NEW
 ```
 
 #### ContactMessage
 ```proto
-optional bool isSelfContact = 18;  // BARU
+optional bool isSelfContact = 18;  // NEW
 ```
 
 #### InteractiveMessage
 ```proto
-optional BloksWidget bloksWidget = 8;  // BARU
+optional BloksWidget bloksWidget = 8;  // NEW
 
 message BloksWidget {
     optional string uuid = 1;
@@ -203,13 +203,13 @@ message BloksWidget {
     optional string type = 3;
 }
 
-// Header juga mendapat bloksWidget
+// Header also receives bloksWidget
 message Header {
-    optional BloksWidget bloksWidget = 10;  // BARU
+    optional BloksWidget bloksWidget = 10;  // NEW
 }
 ```
 
-#### FullHistorySyncOnDemandConfig (baru)
+#### FullHistorySyncOnDemandConfig (new)
 ```proto
 message FullHistorySyncOnDemandConfig {
     optional uint64 historyFromTimestamp = 1;
@@ -217,13 +217,13 @@ message FullHistorySyncOnDemandConfig {
 }
 ```
 
-#### FullHistorySyncOnDemandRequestMetadata — field baru
+#### FullHistorySyncOnDemandRequestMetadata — new field
 ```proto
 optional string businessProduct = 2;
 optional bytes opaqueClientData = 3;
 ```
 
-#### PollCreationMessage — field baru
+#### PollCreationMessage — new fields
 ```proto
 optional int64 endTime = 9;
 optional bool hideParticipantName = 10;
@@ -232,26 +232,26 @@ optional bool allowAddOption = 11;
 
 #### SecretEncryptedMessage
 ```proto
-optional string remoteKeyId = 5;  // BARU
+optional string remoteKeyId = 5;  // NEW
 
-// Enum SecretEncType baru
+// New SecretEncType enum values
 MESSAGE_SCHEDULE = 3;
 POLL_EDIT = 4;
 POLL_ADD_OPTION = 5;
 ```
 
-#### StickerMessage — field baru
+#### StickerMessage — new fields
 ```proto
 optional int32 premium = 24;
 optional string emojis = 25;
 ```
 
-#### StickerPackMessage.Sticker — field baru
+#### StickerPackMessage.Sticker — new field
 ```proto
 optional int32 premium = 7;
 ```
 
-#### ProtocolMessage — field dan enum baru
+#### ProtocolMessage — new fields and enum
 ```proto
 optional AIMediaCollectionMessage aiMediaCollectionMessage = 28;
 optional uint32 afterReadDuration = 29;
@@ -262,12 +262,12 @@ enum Type {
 }
 ```
 
-#### MessageContextInfo — field baru
+#### MessageContextInfo — new field
 ```proto
 optional bytes teeBotMetadata = 17;
 ```
 
-#### MsgOpaqueData — field baru
+#### MsgOpaqueData — new fields
 ```proto
 optional string quarantineExtractedText = 48;
 optional int64 pollEndTime = 49;
@@ -275,7 +275,7 @@ optional bool pollHideVoterNames = 50;
 optional bool pollAllowAddOption = 52;
 ```
 
-#### MessageHistoryMetadata — field baru
+#### MessageHistoryMetadata — new fields
 ```proto
 // oldestMessageTimestamp → oldestMessageTimestampInWindow (rename)
 optional int64 oldestMessageTimestampInWindow = 2;
@@ -284,40 +284,40 @@ optional repeated string nonHistoryReceivers = 4;
 optional int64 oldestMessageTimestampInBundle = 5;
 ```
 
-#### PeerDataOperationRequestMessage — field dan sub-message baru
+#### PeerDataOperationRequestMessage — new fields and sub-messages
 ```proto
 optional CompanionCanonicalUserNonceFetchRequest companionCanonicalUserNonceFetchRequest = 10;
 optional BizBroadcastInsightsContactListRequest bizBroadcastInsightsContactListRequest = 11;
 optional BizBroadcastInsightsRefreshRequest bizBroadcastInsightsRefreshRequest = 12;
 
 message FullHistorySyncOnDemandRequest {
-    optional FullHistorySyncOnDemandConfig fullHistorySyncOnDemandConfig = 3;  // BARU
+    optional FullHistorySyncOnDemandConfig fullHistorySyncOnDemandConfig = 3;  // NEW
 }
 
 message GalaxyFlowAction {
-    optional string galaxyFlowDownloadRequestId = 4;  // BARU
-    optional string agmId = 5;  // BARU
-    // Enum baru: DOWNLOAD_RESPONSES = 2;
+    optional string galaxyFlowDownloadRequestId = 4;  // NEW
+    optional string agmId = 5;  // NEW
+    // New enum: DOWNLOAD_RESPONSES = 2;
 }
 ```
 
-#### PeerDataOperationRequestResponseMessage — field dan sub-message baru
+#### PeerDataOperationRequestResponseMessage — new fields and sub-messages
 ```proto
 optional FlowResponsesCsvBundle flowResponsesCsvBundle = 11;
 optional BizBroadcastInsightsContactListResponse bizBroadcastInsightsContactListResponse = 12;
 
 enum FullHistorySyncOnDemandResponseCode {
-    ERROR_MULTI_PROVIDER_NOT_CONFIGURED = 7;  // BARU
+    ERROR_MULTI_PROVIDER_NOT_CONFIGURED = 7;  // NEW
 }
 ```
 
-#### PeerDataOperationRequestType — enum baru
+#### PeerDataOperationRequestType — new enum values
 ```proto
 BUSINESS_BROADCAST_INSIGHTS_DELIVERED_TO = 12;
 BUSINESS_BROADCAST_INSIGHTS_REFRESH = 13;
 ```
 
-#### RequestWelcomeMessageMetadata — field dan enum baru
+#### RequestWelcomeMessageMetadata — new fields and enum
 ```proto
 optional WelcomeTrigger welcomeTrigger = 2;
 optional BotAgentMetadata botAgentMetadata = 3;
@@ -328,7 +328,7 @@ enum WelcomeTrigger {
 }
 ```
 
-#### PaymentInviteMessage — field baru
+#### PaymentInviteMessage — new fields
 ```proto
 optional bool incentiveEligible = 3;
 optional string referralId = 4;
@@ -340,17 +340,17 @@ enum InviteType {
 }
 ```
 
-#### PaymentExtendedMetadata — field DIHAPUS
+#### PaymentExtendedMetadata — field REMOVED
 ```proto
-// optional string messageParamsJson = 3; — DIHAPUS
+// optional string messageParamsJson = 3; — REMOVED
 ```
 
-#### CloudAPIThreadControlNotification — enum baru
+#### CloudAPIThreadControlNotification — new enum value
 ```proto
 INFO = 3;
 ```
 
-#### InsightDeliveryState (baru)
+#### InsightDeliveryState (new)
 ```proto
 enum InsightDeliveryState {
     SENT = 0;
@@ -361,7 +361,7 @@ enum InsightDeliveryState {
 }
 ```
 
-#### ScheduledMessageMetadata (top-level baru)
+#### ScheduledMessageMetadata (new top-level)
 ```proto
 message ScheduledMessageMetadata {
     optional string revealKeyId = 1;
@@ -372,59 +372,59 @@ message ScheduledMessageMetadata {
 
 ---
 
-### 1.4 Field Baru pada Message Context (ContextInfo)
+### 1.4 New Fields on Message Context (ContextInfo)
 
-| Field | ID | Tipe | Keterangan |
+| Field | ID | Type | Description |
 |-------|----|-----|-----------|
-| `isSpoiler` | 73 | bool | Penanda pesan spoiler |
-| `mediaDomainInfo` | 74 | MediaDomainInfo | Domain key media (E2EE vs non-E2EE) |
-| `partiallySelectedContent` | 75 | PartiallySelectedContent | Konteks teks yang dipilih sebagian |
-| `afterReadDuration` | 76 | uint32 | Durasi setelah dibaca |
+| `isSpoiler` | 73 | bool | Spoiler message flag |
+| `mediaDomainInfo` | 74 | MediaDomainInfo | Media key domain (E2EE vs non-E2EE) |
+| `partiallySelectedContent` | 75 | PartiallySelectedContent | Partially selected text context |
+| `afterReadDuration` | 76 | uint32 | Duration after read |
 
-#### Sub-field baru
+#### New sub-fields
 ```proto
-// PartiallySelectedContent (baru)
+// PartiallySelectedContent (new)
 message PartiallySelectedContent {
     optional string text = 1;
 }
 
-// StatusAudienceMetadata — field baru
+// StatusAudienceMetadata — new field
 optional string listName = 2;
 optional string listEmoji = 3;
 
-// ExternalAdReplyInfo — field baru (strategi AGM)
+// ExternalAdReplyInfo — new fields (AGM strategy)
 optional bool containsCtwaFlowsAutoReply = 28;
 optional int32 agmThumbnailStrategy = 29;
 optional int32 agmTitleStrategy = 30;
 optional int32 agmSubtitleStrategy = 31;
 optional int32 agmHeaderInteractionStrategy = 32;
 
-// ForwardNewsletterMessageInfo — field baru
+// ForwardNewsletterMessageInfo — new field
 optional string profileName = 6;
 ```
 
 ---
 
-### 1.5 Field Baru pada Conversation
+### 1.5 New Fields on Conversation
 
-| Field | ID | Tipe | Keterangan |
+| Field | ID | Type | Description |
 |-------|----|-----|-----------|
-| `isMarketingMessageThread` | 55 | bool | Thread pesan marketing |
-| `isSenderNewAccount` | 56 | bool | Pengirim baru (akun baru) |
-| `afterReadDuration` | 57 | uint32 | Durasi setelah dibaca |
+| `isMarketingMessageThread` | 55 | bool | Marketing message thread |
+| `isSenderNewAccount` | 56 | bool | New sender (new account) |
+| `afterReadDuration` | 57 | uint32 | Duration after read |
 
 ```proto
-// EndOfHistoryTransferType — enum value baru
+// EndOfHistoryTransferType — new enum value
 COMPLETE_ON_DEMAND_SYNC_WITH_MORE_MSG_ON_PRIMARY_BUT_NO_ACCESS = 3;
 ```
 
 ---
 
-### 1.6 Device Capabilities — Perubahan
+### 1.6 Device Capabilities — Changes
 
 ```proto
 message DeviceCapabilities {
-    optional AiThread aiThread = 6;  // BARU
+    optional AiThread aiThread = 6;  // NEW
     message AiThread {
         optional SupportLevel supportLevel = 1;
         enum SupportLevel {
@@ -436,45 +436,45 @@ message DeviceCapabilities {
 
     message BusinessBroadcast {
         optional bool importListEnabled = 1;
-        optional bool companionSupportEnabled = 2;     // BARU
-        optional bool campaignSyncEnabled = 3;         // BARU
-        optional bool insightsSyncEnabled = 4;          // BARU
-        optional int32 recipientLimit = 5;              // BARU
+        optional bool companionSupportEnabled = 2;     // NEW
+        optional bool campaignSyncEnabled = 3;         // NEW
+        optional bool insightsSyncEnabled = 4;          // NEW
+        optional int32 recipientLimit = 5;              // NEW
     }
 }
 ```
 
 ---
 
-### 1.7 DeviceProps.HistorySyncConfig — Field Baru
+### 1.7 DeviceProps.HistorySyncConfig — New Fields
 
-| Field | ID | Tipe | Keterangan |
+| Field | ID | Type | Description |
 |-------|----|-----|-----------|
-| `initialSyncMaxMessagesPerChat` | 20 | uint32 | Batas pesan per chat saat sync awal |
-| `supportManusHistory` | 21 | bool | Support history sync Manus |
-| `supportHatchHistory` | 22 | bool | Support history sync Hatch |
-| `supportedBotChannelFbids` | 23 | repeated string | FBID channel bot yang didukung |
-| `supportInlineContacts` | 24 | bool | Support kontak inline |
+| `initialSyncMaxMessagesPerChat` | 20 | uint32 | Max messages per chat during initial sync |
+| `supportManusHistory` | 21 | bool | Support Manus history sync |
+| `supportHatchHistory` | 22 | bool | Support Hatch history sync |
+| `supportedBotChannelFbids` | 23 | repeated string | Supported bot channel FBIDs |
+| `supportInlineContacts` | 24 | bool | Support inline contacts |
 
 ---
 
-### 1.8 ClientPayload — Field Baru
+### 1.8 ClientPayload — New Fields
 
 ```proto
 optional repeated string pairedPeripherals = 47;
 message WebInfo {
-    optional string browser = 5;          // BARU
-    optional string browserVersion = 6;   // BARU
+    optional string browser = 5;          // NEW
+    optional string browserVersion = 6;   // NEW
 }
 
-// ProxyConfig — enum baru
+// ProxyConfig — new enum values
 MNS_SECONDARY = 6;
 SOCKS_PROXY = 7;
 ```
 
 ---
 
-### 1.9 ClientPairingProps — Field Baru
+### 1.9 ClientPairingProps — New Fields
 
 ```proto
 optional bool isHsThumbnailSyncEnabled = 4;
@@ -486,22 +486,22 @@ optional bytes subscriptionSyncPayload = 5;
 ### 1.10 HandshakeMessage — Post-Quantum Crypto
 
 ```proto
-// ClientHello — field baru
+// ClientHello — new fields
 optional bytes paddedBytes = 6;
 optional bool sendServerHelloPaddedBytes = 7;
 optional bool simulateXxkemFs = 8;
 optional HandshakePqMode pqMode = 9;
 optional bytes extendedEphemeral = 10;
 
-// ServerHello — field baru
+// ServerHello — new fields
 optional bytes paddingBytes = 5;
 optional bytes extendedCiphertext = 6;
 
-// ClientHello encrypted static — field baru
+// ClientHello encrypted static — new fields
 optional bytes paddedBytes = 4;
 optional bool simulateXxkemFs = 5;
 
-// Enum baru: HandshakePqMode (8 mode)
+// New enum: HandshakePqMode (8 modes)
 enum HandshakePqMode {
     HANDSHAKE_PQ_MODE_UNKNOWN = 0;
     XXKEM = 1;
@@ -517,13 +517,13 @@ enum HandshakePqMode {
 
 ---
 
-### 1.11 HistorySync — Field Baru
+### 1.11 HistorySync — New Fields
 
 ```proto
-// syncType menjadi optional (dulu required)
+// syncType becomes optional (was required)
 optional HistorySyncType syncType = 1;
 
-// Field baru
+// New fields
 optional bytes nctSalt = 19;
 repeated InlineContact inlineContacts = 20;
 optional bool inlineContactsProvided = 21;
@@ -531,14 +531,14 @@ optional bool inlineContactsProvided = 21;
 
 ---
 
-### 1.12 Bot Metadata — Perubahan Besar
+### 1.12 Bot Metadata — Major Changes
 
-#### BotAvatarMetadata DIHAPUS → Diganti dengan BotAgentMetadata
+#### BotAvatarMetadata REMOVED → Replaced with BotAgentMetadata
 ```proto
-// DIHAPUS:
+// REMOVED:
 // optional BotAvatarMetadata avatarMetadata = 1;
 
-// BARU: 6 field pada BotMetadata
+// NEW: 6 fields on BotMetadata
 optional BotDocumentMessageMetadata botDocumentMessageMetadata = 34;
 optional BotGroupMetadata botGroupMetadata = 35;
 optional BotRenderingConfigMetadata botRenderingConfigMetadata = 36;
@@ -547,7 +547,7 @@ optional AIMediaCollectionMetadata aiMediaCollectionMetadata = 38;
 optional BotCommandMetadata commandMetadata = 39;
 ```
 
-#### BotCapabilities — 10 Enum Baru (47 → 61)
+#### BotCapabilities — 10 New Enum Values (47 → 61)
 ```
 RICH_RESPONSE_UR_ZEITGEIST_CITATIONS = 50;
 RICH_RESPONSE_UR_ZEITGEIST_CAROUSEL = 51;
@@ -563,7 +563,7 @@ UNIFIED_RESPONSE_EMBEDDED_SCREENS = 60;
 AI_SUBSCRIPTION_ENABLED = 61;
 ```
 
-#### BotMetricsEntryPoint — 9 Enum Baru
+#### BotMetricsEntryPoint — 9 New Enum Values
 ```
 MEDIA_PICKER_1_ON_1_CHAT = 39;
 MEDIA_PICKER_GROUP_CHAT = 40;
@@ -578,36 +578,36 @@ NEW_CHAT_LIST = 56;
 
 #### BotModeSelectionMetadata
 ```proto
-repeated uint32 overrideMode = 2;  // BARU
+repeated uint32 overrideMode = 2;  // NEW
 
-// Rename enum
+// Renamed enum
 UNKNOWN_MODE → DEFAULT_MODE = 0;
 REASONING_MODE → THINK_HARD_MODE = 1;
 ```
 
-#### BotSessionSource — Enum Baru
+#### BotSessionSource — New Enum Value
 ```
 AI_HOME_SESSION = 7;
 ```
 
 #### BotProgressIndicatorMetadata
 ```proto
-optional int64 estimatedCompletionTime = 3;  // BARU
+optional int64 estimatedCompletionTime = 3;  // NEW
 ```
 
-#### BotSignatureVerificationUseCase — Enum Baru
+#### BotSignatureVerificationUseCase — New Enum Value
 ```
 WA_TEE_BOT_MSG = 2;
 ```
 
 #### BotImagineMetadata
 ```proto
-optional string shortPrompt = 2;  // BARU
+optional string shortPrompt = 2;  // NEW
 ```
 
 #### BotMetricsThreadEntryPoint
 ```proto
-optional AIThreadEntryPoint sideChatEntryPoint = 3;  // BARU
+optional AIThreadEntryPoint sideChatEntryPoint = 3;  // NEW
 ```
 
 #### BotModeSelectionMetadata → BotUserSelectionMode Rename
@@ -618,7 +618,7 @@ REASONING_MODE → THINK_HARD_MODE
 
 ---
 
-### 1.13 AI Thread — Perubahan
+### 1.13 AI Thread — Changes
 
 #### AIThreadInfo.AIThreadClientInfo
 ```proto
@@ -627,28 +627,28 @@ enum AIThreadType {
     UNKNOWN = 0;
     DEFAULT = 1;
     INCOGNITO = 2;
-    SIDE_CHAT = 3;  // BARU
+    SIDE_CHAT = 3;  // NEW
 }
 ```
 
-#### AIHomeState.AIHomeAction — field dan enum baru
+#### AIHomeState.AIHomeAction — new field and enum
 ```proto
-optional string cardTypeId = 8;  // BARU
+optional string cardTypeId = 8;  // NEW
 enum AIHomeActionType {
     PROMPT = 0;
     CREATE_IMAGE = 1;
     ANIMATE_PHOTO = 2;
     ANALYZE_FILE = 3;
-    COLLABORATE = 4;  // BARU
+    COLLABORATE = 4;  // NEW
 }
 ```
 
 ---
 
-### 1.14 ContextInfo — Sub-Message Baru
+### 1.14 ContextInfo — New Sub-Message
 
 ```proto
-// PartiallySelectedContent (baru, id 75)
+// PartiallySelectedContent (new, id 75)
 message PartiallySelectedContent {
     optional string text = 1;
 }
@@ -656,7 +656,7 @@ message PartiallySelectedContent {
 
 ---
 
-### 1.15 MessageAssociation — Enum Baru
+### 1.15 MessageAssociation — New Enum Value
 
 ```proto
 POLL_ADD_OPTION = 20;
@@ -664,7 +664,7 @@ POLL_ADD_OPTION = 20;
 
 ---
 
-### 1.16 MutationProps — 10 Enum Baru
+### 1.16 MutationProps — 10 New Enum Values
 
 ```
 SETTINGS_SYNC_ACTION = 78;
@@ -680,7 +680,7 @@ AI_THREAD_DELETE_ACTION = 10003;
 
 ---
 
-### 1.17 StatusAttribution — Enum Baru
+### 1.17 StatusAttribution — New Enum Value
 
 ```
 SOUNDCLOUD = 11;
@@ -688,151 +688,151 @@ SOUNDCLOUD = 11;
 
 ---
 
-### 1.18 Perubahan Minor pada Field yang Menjadi Optional
+### 1.18 Minor Changes — Fields Made Optional
 
-| Field | Lama | Baru |
+| Field | Old | New |
 |-------|------|-----|
 | `Conversation.id` | `string id = 1` | `optional string id = 1` |
 | `GroupParticipant.userJid` | `string userJid = 1` | `optional string userJid = 1` |
 | `HistorySync.syncType` | `HistorySyncType syncType = 1` | `optional HistorySyncType syncType = 1` |
 | `LIDMigrationMapping.pn` | `uint64 pn = 1` | `optional uint64 pn = 1` |
 | `LIDMigrationMapping.assignedLid` | `uint64 assignedLid = 2` | `optional uint64 assignedLid = 2` |
-| `Citation` — semua field | required | optional |
-| `VideoEndCard` — semua field | required | optional |
+| `Citation` — all fields | required | optional |
+| `VideoEndCard` — all fields | required | optional |
 
 ---
 
-### 1.19 File Baru
-- `src/Utils/wileys-event-stream.ts` — Event stream capture dan playback untuk debugging/testing
+### 1.19 New File
+- `src/Utils/wileys-event-stream.ts` — Event stream capture and playback for debugging/testing
 
 ---
 
 ## 2. LID/JID Core (src/WABinary/jid-utils.ts)
 
-### Fungsi Baru
-| Fungsi | Keterangan |
-|--------|-----------|
-| `lidToJid(jid)` | Konversi `@lid` → `@s.whatsapp.net` (strip domain LID) |
-| `jidToLid(jid)` | Konversi `@s.whatsapp.net` → `@lid` (untuk cache key) |
-| `getBotJid(jid)` | Resolusi `@bot` JID ke phone JID melalui BOT_MAP (120+ entri) |
-| `isJidUser(jid)` | Alias untuk `isPnUser` — cek apakah JID berakhiran `@s.whatsapp.net` |
+### New Functions
+| Function | Description |
+|----------|-----------|
+| `lidToJid(jid)` | Convert `@lid` → `@s.whatsapp.net` (strip LID domain) |
+| `jidToLid(jid)` | Convert `@s.whatsapp.net` → `@lid` (for cache key) |
+| `getBotJid(jid)` | Resolve `@bot` JID to phone JID via BOT_MAP (120+ entries) |
+| `isJidUser(jid)` | Alias for `isPnUser` — check if JID ends with `@s.whatsapp.net` |
 
 ---
 
 ## 3. Socket Messages Send (src/Socket/messages-send.ts) — FULL REPLACEMENT
 
-File ini **diganti seluruhnya** dengan versi wileys port. Perubahan utama:
+This file is **completely replaced** with the wileys port version. Main changes:
 
-- Import `NodeCache` tetap digunakan untuk session caching
-- Import WAProto via `createRequire()` (bukan ESM langsung) untuk kompatibilitas
-- `relayMessage` menggunakan `authState.keys.transaction(exec, 'relayMessage')`
-- Support album messages dengan delay handling
-- Support bot nodes dan business nodes dalam relay
-- `extractDeviceJids` dipanggil dengan 4 argumen (rc9 signature)
-- Media handle via `(up as any).handle` untuk media relay
-- `messageRetryManager` diteruskan dari underlying socket
-- `getStatusCodeForMediaRetry` argumen di-cast ke number
-- `assertSessions` menerima parameter `force?: boolean`
+- `NodeCache` import retained for session caching
+- WAProto imported via `createRequire()` (not direct ESM) for compatibility
+- `relayMessage` uses `authState.keys.transaction(exec, 'relayMessage')`
+- Album messages support with delay handling
+- Bot nodes and business nodes support in relay
+- `extractDeviceJids` called with 4 arguments (rc9 signature)
+- Media handle via `(up as any).handle` for media relay
+- `messageRetryManager` passed through from underlying socket
+- `getStatusCodeForMediaRetry` argument cast to number
+- `assertSessions` accepts `force?: boolean` parameter
 
 ---
 
 ## 4. Socket Messages Receive (src/Socket/messages-recv.ts)
 
 ### MEX Notification Modernization
-- Handler lama `handleMexNewsletterNotification` diganti dengan `handleMexNotification`
-- Mendukung dua mode: **Modern GQL** (op_name-based) dan **Legacy Mexican** (<mex> child)
-- Modern GQL: parse JSON dari `update` node, route berdasarkan `op_name`
-- 15+ op_name types untuk newsletter operations (join, leave, promote, demote, dll.)
+- Old handler `handleMexNewsletterNotification` replaced with `handleMexNotification`
+- Supports two modes: **Modern GQL** (op_name-based) and **Legacy Mexican** (<mex> child)
+- Modern GQL: parse JSON from `update` node, route by `op_name`
+- 15+ op_name types for newsletter operations (join, leave, promote, demote, etc.)
 
-### Mex Notification Types Baru
-| Op Name | Handler | Keterangan |
+### New Mex Notification Types
+| Op Name | Handler | Description |
 |---------|---------|-----------|
-| `NotificationUserReachoutTimelockUpdate` | `handleReachoutTimelockNotification` | Timelock restrimasi business commerce |
-| `MessageCappingInfoNotification` | `handleMessageCappingNotification` | Limit pesan chat baru |
-| Newsletter operations | `handleLegacyMexNewsletterNotification` | Fallback ke struktur lama |
+| `NotificationUserReachoutTimelockUpdate` | `handleReachoutTimelockNotification` | Business commerce timelock restriction |
+| `MessageCappingInfoNotification` | `handleMessageCappingNotification` | New chat message limit |
+| Newsletter operations | `handleLegacyMexNewsletterNotification` | Fallback to old structure |
 
 ### Call Ack Fix
-- Stanza ack untuk tag `call` sekarang meng-copy type dari child node
+- Stanza ack for `call` tag now copies type from child node
 
 ### Read Receipt Fix
-- `sendReceipt` sekarang menggunakan `(msg.key.id ?? '') as string` (fallback string kosong)
-- Type ack menggunakan `'read'` sebagai default
+- `sendReceipt` now uses `(msg.key.id ?? '') as string` (empty string fallback)
+- Type ack uses `'read'` as default
 
 ---
 
 ## 5. Socket Chats (src/Socket/chats.ts)
 
 ### App-State Sync Resilience
-- Mengimport `HISTORY_SYNC_PAUSED_TIMEOUT_MS` (120 detik) dari Defaults
-- Mengimport helper resilience dari app-state sync
-- Konstanta `MAX_SYNC_ATTEMPTS` lokal dihapus, menggunakan shared helper
+- Imports `HISTORY_SYNC_PAUSED_TIMEOUT_MS` (120 seconds) from Defaults
+- Imports resilience helpers from app-state sync
+- Local `MAX_SYNC_ATTEMPTS` constant removed, uses shared helper
 
 ### History Sync Pause Tracking
-- State tracking untuk history sync pause
-- State tracking untuk blocked collections
-- Retry loop mendukung forced snapshot retries
-- Retry loop mendukung version repair
-- Perbedaan error antara missing-key blocking dan fatal errors
-- Events baru: `history-sync.completion` dan `history-sync.paused.status`
-- Full app-state sync sekarang membersihkan blocked collections sebelum retry
-- Connection update flow: track history stalls dan retry blocked collections
+- State tracking for history sync pause
+- State tracking for blocked collections
+- Retry loop supports forced snapshot retries
+- Retry loop supports version repair
+- Error differentiation between missing-key blocking and fatal errors
+- New events: `history-sync.completion` and `history-sync.paused.status`
+- Full app-state sync now clears blocked collections before retry
+- Connection update flow: tracks history stalls and retries blocked collections
 
 ---
 
 ## 6. Utils Messages (src/Utils/messages.ts)
 
 ### normalizeMessageContent — 5 → 23 Wrappers
-**Lama:** Hanya 5 future-proof message types (ephemeralMessage, viewOnceMessage, documentWithCaptionMessage, viewOnceMessageV2, viewOnceMessageV2Extension, editedMessage, associatedChildMessage, groupStatusMessage, groupStatusMessageV2)
+**Old:** Only 5 future-proof message types (ephemeralMessage, viewOnceMessage, documentWithCaptionMessage, viewOnceMessageV2, viewOnceMessageV2Extension, editedMessage, associatedChildMessage, groupStatusMessage, groupStatusMessageV2)
 
-**Baru:** 23 wrapper types termasuk: ephemeralMessage, viewOnceMessage, documentWithCaptionMessage, viewOnceMessageV2, viewOnceMessageV2Extension, editedMessage, groupMentionedMessage, botInvokeMessage, lottieStickerMessage, eventCoverImage, statusMentionMessage, pollCreationOptionImageMessage, associatedChildMessage, groupStatusMentionMessage, pollCreationMessageV4, pollCreationMessageV5, statusAddYours, groupStatusMessage, limitSharingMessage, botTaskMessage, questionMessage, groupStatusMessageV2, botForwardedMessage
+**New:** 23 wrapper types including: ephemeralMessage, viewOnceMessage, documentWithCaptionMessage, viewOnceMessageV2, viewOnceMessageV2Extension, editedMessage, groupMentionedMessage, botInvokeMessage, lottieStickerMessage, eventCoverImage, statusMentionMessage, pollCreationOptionImageMessage, associatedChildMessage, groupStatusMentionMessage, pollCreationMessageV4, pollCreationMessageV5, statusAddYours, groupStatusMessage, limitSharingMessage, botTaskMessage, questionMessage, groupStatusMessageV2, botForwardedMessage
 
 ### Interactive Buttons Handler
-- Handler baru di `generateWAMessageContent` sebelum text branch
-- Mendukung: `interactiveButtons`, `nativeFlowMessage`, `nativeFlowButtons`
-- Fix ghost messages di mana buttons arrive sebagai plain text
-- Membangun interactiveMessage dengan body, footer, header, contextInfo
+- New handler in `generateWAMessageContent` before text branch
+- Supports: `interactiveButtons`, `nativeFlowMessage`, `nativeFlowButtons`
+- Fixes ghost messages where buttons arrive as plain text
+- Builds interactiveMessage with body, footer, header, contextInfo
 
 ### Status/Broadcast Media
-- Media upload sekarang menyimpan full upload result
-- Status/broadcast media membaca CDN handle dari upload result
-- Status/broadcast media meng-omit `url` ketika WhatsApp returns media handle
-- Status/broadcast media skip `mediaKeyTimestamp` ketika WhatsApp returns handle
+- Media upload now stores full upload result
+- Status/broadcast media reads CDN handle from upload result
+- Status/broadcast media omits `url` when WhatsApp returns media handle
+- Status/broadcast media skips `mediaKeyTimestamp` when WhatsApp returns handle
 
 ### Event Invite Message
-- Jenis pesan baru: `eventInvite` dengan eventId, eventTitle, startTime, caption, jpegThumbnail, isCanceled
+- New message type: `eventInvite` with eventId, eventTitle, startTime, caption, jpegThumbnail, isCanceled
 
 ### Advanced Poll Support
-- `pollCreationMessageV6` dengan endTime, hideParticipantName, allowAddOption
-- `pollAddOptionMessage` untuk menambah opsi poll
-- `pollUpdateMessage` untuk vote update pada poll
+- `pollCreationMessageV6` with endTime, hideParticipantName, allowAddOption
+- `pollAddOptionMessage` to add poll options
+- `pollUpdateMessage` for vote updates on polls
 
 ### TypeScript Fix
-- `return content` → `return content ?? undefined` untuk mencegah TS2322
+- `return content` → `return content ?? undefined` to prevent TS2322
 
 ---
 
 ## 7. Types (src/Types/)
 
 ### Message.ts (src/Types/Message.ts)
-- `MessageWithContextInfo` → field baru: `eventInviteMessage`, `pollCreationMessageV6`
-- `PollMessageOptions` → field baru: `endDate`, `hideParticipantName`, `allowAddOption`
+- `MessageWithContextInfo` → new fields: `eventInviteMessage`, `pollCreationMessageV6`
+- `PollMessageOptions` → new fields: `endDate`, `hideParticipantName`, `allowAddOption`
 - `AnyRegularMessageContent` → support `eventInvite`, `pollAddOption`
 
 ### Events.ts (src/Types/Events.ts)
 - `messaging-history.set` → expose `chunkOrder`
-- `messaging-history.status` event typing baru
-- `BufferedEventData.historySets` → carry `lidPnMappings` dan `chunkOrder`
+- New `messaging-history.status` event typing
+- `BufferedEventData.historySets` → carry `lidPnMappings` and `chunkOrder`
 
-### State.ts (src/Types/State.ts) — FILE BARU/EXTENSIVE
-| Type | Keterangan |
+### State.ts (src/Types/State.ts) — NEW/EXTENSIVE FILE
+| Type | Description |
 |------|-----------|
-| `ReachoutTimelockState` | State timelock (isActive, timeEnforcementEnds, enforcementType) |
-| `ReachoutTimelockEnforcementType` | 17 jenis pelanggaran commerce + DEFAULT + WEB_COMPANION_ONLY |
+| `ReachoutTimelockState` | Timelock state (isActive, timeEnforcementEnds, enforcementType) |
+| `ReachoutTimelockEnforcementType` | 17 commerce violation types + DEFAULT + WEB_COMPANION_ONLY |
 | `NewChatMessageCappingStatusType` | NONE → FIRST_WARNING → SECOND_WARNING → CAPPED |
 | `NewChatMessageCappingMVStatusType` | NOT_ELIGIBLE, NOT_ACTIVE, ACTIVE, ACTIVE_UPGRADE_AVAILABLE |
 | `NewChatMessageCappingOTEStatusType` | NOT_ELIGIBLE, ELIGIBLE, ACTIVE_IN_CURRENT_CYCLE, EXHAUSTED |
 | `NewChatMessageCapInfo` | Total/used quota, cycle timestamps, ote/mv/capping status |
-| `ConnectionState.reachoutTimeLock` | Field baru di ConnectionState |
+| `ConnectionState.reachoutTimeLock` | New field in ConnectionState |
 
 ### index.ts
 - Expose `Browsers.android(...)` type
@@ -843,68 +843,68 @@ File ini **diganti seluruhnya** dengan versi wileys port. Perubahan utama:
 
 ### auth-utils.ts — PQueue → Mutex
 - **Dependency removed:** `p-queue`
-- Semua queue operations diganti dengan `Mutex` dari `async-mutex`
-- Cache mutex wrapper dihapus
-- Cache get dan set paths tidak lagi serialize melalui mutex
-- Key queues diganti dengan key mutex map
-- Helper direct-write queue diganti dengan mutex helper
-- Direct writes sekarang menggunakan per-type mutexes
-- Comment flow diperbarui untuk mutex flow
+- All queue operations replaced with `Mutex` from `async-mutex`
+- Cache mutex wrapper removed
+- Cache get and set paths no longer serialize through mutex
+- Key queues replaced with key mutex map
+- Direct-write queue helper replaced with mutex helper
+- Direct writes now use per-type mutexes
+- Comment flow updated for mutex flow
 
 ### pre-key-manager.ts — PQueue → Mutex
-- Import `Mutex` menggantikan `PQueue`
-- Menyimpan mutexes menggantikan queues
-- Helper `withDeviceMutex` menggunakan `mutex.runExclusive`
-- Semua operasi pre-key sekarang menggunakan mutex untuk thread-safety
+- Import `Mutex` replacing `PQueue`
+- Stores mutexes replacing queues
+- Helper `withDeviceMutex` uses `mutex.runExclusive`
+- All pre-key operations now use mutex for thread-safety
 
 ---
 
 ## 9. History (src/Utils/history.ts)
 
-- Import stream pipeline untuk inflate
-- Import `createInflate` untuk decompression
-- Hoist root participant ke `key.participant`
-- `downloadHistory` sekarang inflate history via stream pipeline (bukan Buffer concat)
-- Contact `jid` field ditambahkan
-- Normalisasi root participant sebelum downstream processing
-- Chat objects sekarang reuse objects (bukan clone) untuk efisiensi
+- Import stream pipeline for inflate
+- Import `createInflate` for decompression
+- Hoist root participant to `key.participant`
+- `downloadHistory` now inflates history via stream pipeline (not Buffer concat)
+- Contact `jid` field added
+- Normalize root participant before downstream processing
+- Chat objects now reuse objects (not clone) for efficiency
 
 ---
 
 ## 10. Event Buffer (src/Utils/event-buffer.ts)
 
-- Buffered history events sekarang retain `chunkOrder` dan merged `lidPnMappings`
-- Consolidated history events sekarang emit `chunkOrder` dan `lidPnMappings`
+- Buffered history events now retain `chunkOrder` and merged `lidPnMappings`
+- Consolidated history events now emit `chunkOrder` and `lidPnMappings`
 
 ---
 
 ## 11. Messages Media (src/Utils/messages-media.ts)
 
-- `downloadEncryptedContent` — skip `Buffer.concat` ketika tidak ada remainder (optimasi)
-- `generateProfilePicture` — keep full image (bukan square-crop) untuk profile uploads
+- `downloadEncryptedContent` — skip `Buffer.concat` when no remainder (optimization)
+- `generateProfilePicture` — keep full image (not square-crop) for profile uploads
 
 ---
 
 ## 12. Process Message (src/Utils/process-message.ts)
 
-- `isRealMessage` sekarang menerima optional `meId` (wileys compat)
-- `messaging-history.set` sekarang forward history `chunkOrder`
-- `cleanMessage` — normalisasi nested reaction/poll keys untuk 1:1 chats
+- `isRealMessage` now accepts optional `meId` (wileys compat)
+- `messaging-history.set` now forwards history `chunkOrder`
+- `cleanMessage` — normalize nested reaction/poll keys for 1:1 chats
 
 ---
 
 ## 13. Validate Connection (src/Utils/validate-connection.ts)
 
-- Android user agent platform advertisement ketika `browser[1]` adalah "Android"
-- Skip webInfo untuk Android browser payloads
-- Map Android browser sessions ke `ANDROID_PHONE` companion props
+- Android user agent platform advertisement when `browser[1]` is "Android"
+- Skip webInfo for Android browser payloads
+- Map Android browser sessions to `ANDROID_PHONE` companion props
 
 ---
 
 ## 14. Defaults (src/Defaults/)
 
 ### index.ts
-- Export baru: `HISTORY_SYNC_PAUSED_TIMEOUT_MS = 120_000` (same as WA Web's handleChunkProgress / restartPausedTimer)
+- New export: `HISTORY_SYNC_PAUSED_TIMEOUT_MS = 120_000` (same as WA Web's handleChunkProgress / restartPausedTimer)
 
 ### baileys-version.json
 - Version: `[2, 3000, 1035194821]` → `[2, 3000, 1036692702]`
@@ -913,8 +913,8 @@ File ini **diganti seluruhnya** dengan versi wileys port. Perubahan utama:
 
 ## 15. Browser Utils (src/Utils/browser-utils.ts)
 
-- Export `getPlatformId` untuk platform identification
-- Android platform support untuk view-once capable sessions
+- Export `getPlatformId` for platform identification
+- Android platform support for view-once capable sessions
 
 ---
 
@@ -922,16 +922,16 @@ File ini **diganti seluruhnya** dengan versi wileys port. Perubahan utama:
 
 - Repair invalid LTHash state versions
 - Export missing-key helpers
-- `encodeSyncdPatch` sekarang tag missing app-state keys secara eksplisit
-- `decodeSyncdMutations` sekarang surface missing-key state
-- `decodeSyncdPatch` sekarang surface missing-key state
-- Snapshot/patch verification sekarang surface missing-key state
+- `encodeSyncdPatch` now explicitly tags missing app-state keys
+- `decodeSyncdMutations` now surfaces missing-key state
+- `decodeSyncdPatch` now surfaces missing-key state
+- Snapshot/patch verification now surfaces missing-key state
 
 ---
 
 ## 17. Generics (src/Utils/generics.ts)
 
-- Hapus timeout stack capture overhead (performance optimization)
+- Remove timeout stack capture overhead (performance optimization)
 - `delayCancellable` stack capture removed
 - `delayCancellable` cancel path simplified
 - `promiseTimeout` stack capture removed
@@ -945,30 +945,30 @@ File ini **diganti seluruhnya** dengan versi wileys port. Perubahan utama:
 - Import `isHostedLidUser`
 - Hosted LID/PN mapping validation
 - Hosted.lid reverse lookup accepted
-- Device 99 resolves to hosted.lid pada PN→LID lookup
+- Device 99 resolves to hosted.lid on PN→LID lookup
 - LID→PN reverse mapping preserves hosted device 99
 
 ### libsignal.ts
-- Device 99 migrations sekarang force `hosted.lid` targets
+- Device 99 migrations now force `hosted.lid` targets
 - Logic: `fromDecoded.device === 99 && rawTargetDecoded.server === 'lid'` → `${rawTargetDecoded.user}:99@hosted.lid`
 
 ---
 
 ## 19. Groups (src/Socket/groups.ts)
 
-- Group metadata sekarang preserve `addressingMode` (LID vs PN)
+- Group metadata now preserves `addressingMode` (LID vs PN)
 - `addressingMode: group.attrs.addressing_mode === 'lid' ? LID : PN`
 
 ---
 
 ## 20. New Patch Files (src/patch/)
 
-| File | Baris | Keterangan |
+| File | Lines | Description |
 |------|-------|-----------|
 | `wileys-patch.ts` | 45,168 | LID ev.emit intercept + group cache wiring + PN-first incoming fallback |
-| `wileys-utils.ts` | 29,540 | Utility functions: normalizeMessageContentFull, extractMessageContent, isRealMessage, shouldIncrementChatUnread, getChatId, fetchLatestWileysVersion, captureEventStream, readAndEmitEventStream, ALL_WA_PATCH_NAMES, META_AI_JID, OFFICIAL_BIZ_JID, dan lainnya |
-| `make-in-memory-store.ts` | 31,413 | In-memory store untuk chats & messages dengan WileysStore, WileysChatKey, WileysStoreConfig |
-| `status-patch.ts` | 22,503 | WhatsApp Status/story sending dengan 23-wrapper awareness |
+| `wileys-utils.ts` | 29,540 | Utility functions: normalizeMessageContentFull, extractMessageContent, isRealMessage, shouldIncrementChatUnread, getChatId, fetchLatestWileysVersion, captureEventStream, readAndEmitEventStream, ALL_WA_PATCH_NAMES, META_AI_JID, OFFICIAL_BIZ_JID, and more |
+| `make-in-memory-store.ts` | 31,413 | In-memory store for chats & messages with WileysStore, WileysChatKey, WileysStoreConfig |
+| `status-patch.ts` | 22,503 | WhatsApp Status/story sending with 23-wrapper awareness |
 | `group-status-patch.ts` | 20,072 | Group status V2 send |
 | `interactive-buttons.ts` | 38,532 | Buttons, lists, sections: sendButtons, sendListMessage, sendInteractive, InteractiveMessageOptions |
 | `read-receipt-guard.ts` | 627 | Block read receipts via globalThis flag (getAuroraBlockReadReceipts, setAuroraBlockReadReceipts, clearAuroraBlockReadReceipts) |
@@ -978,27 +978,27 @@ File ini **diganti seluruhnya** dengan versi wileys port. Perubahan utama:
 
 ## 21. New Standalone Files
 
-| File | Baris | Keterangan |
+| File | Lines | Description |
 |------|-------|-----------|
-| `make-wa-socket.ts` | 27,120 | `createSocket()` — Enhanced WA socket dengan auto-apply patches di runtime |
-| `baileys-compat.ts` | 1,935 | Static direct imports dari Baileys modules untuk compat |
+| `make-wa-socket.ts` | 27,120 | `createSocket()` — Enhanced WA socket with auto-apply patches at runtime |
+| `baileys-compat.ts` | 1,935 | Static direct imports from Baileys modules for compat |
 | `plugin-compat.ts` | 16,070 | Plugin compatibility layer |
 | `wileys-types.ts` | 7,037 | Wileys type definitions |
-| `wileys-baileys-types-stub.d.ts` | 1,076 | Type stub untuk @whiskeysockets/baileys |
+| `wileys-baileys-types-stub.d.ts` | 1,076 | Type stub for @whiskeysockets/baileys |
 
 ---
 
 ## 22. New Utility Files (src/utils/)
 
-| File | Baris | Keterangan |
+| File | Lines | Description |
 |------|-------|-----------|
-| `jid.ts` | 19,747 | Comprehensive JID utilities untuk LID/PN resolution dan caching |
+| `jid.ts` | 19,747 | Comprehensive JID utilities for LID/PN resolution and caching |
 
 ---
 
 ## 23. Entry Point (src/index.ts)
 
-Export baru di top level:
+New top-level exports:
 - `from './patch/wileys-patch'` — LID/JID resolution functions
 - `from './patch/wileys-utils'` — Wileys utility functions
 - `from './patch/make-in-memory-store'` — In-memory store
@@ -1013,22 +1013,22 @@ Export baru di top level:
 ## 24. TypeScript Config (tsconfig.build.json)
 
 - Path alias `@whiskeysockets/baileys` → stub + `lib/index.d.ts`
-- 16 lines changed untuk accommodate stub resolution
+- 16 lines changed to accommodate stub resolution
 
 ---
 
 ## 25. DIFILES (Removed from Tracking)
 
-| File | Keterangan |
+| File | Description |
 |------|-----------|
-| `Example/example.ts` | Contoh file dihapus dari tracking |
-| `Media/*` | Semua media files (logo, images, audio, video) dihapus dari tracking |
+| `Example/example.ts` | Example file removed from tracking |
+| `Media/*` | All media files (logo, images, audio, video) removed from tracking |
 
 ---
 
 ## Summary
 
-### Statistik
+### Statistics
 | Metric | Value |
 |--------|-------|
 | Files changed | 41 |
@@ -1037,14 +1037,14 @@ Export baru di top level:
 | New files created | 12+ |
 | New patch steps | 126 |
 
-### Area Utama
-1. **WAProto**: Refresh ke versi terbaru dengan 50+ message/field baru
-2. **LID/JID**: Sistem resolusi Linked ID vs Phone Number lengkap dengan 120+ BOT_MAP entries
-3. **MEX**: Modernization handler untuk 15+ notification types
+### Key Areas
+1. **WAProto**: Refresh to latest version with 50+ new message/field types
+2. **LID/JID**: Complete Linked ID vs Phone Number resolution system with 120+ BOT_MAP entries
+3. **MEX**: Modernization handler for 15+ notification types
 4. **Message Content**: normalizeMessageContent 5→23 wrappers, interactive buttons, event invite, advanced polls
 5. **Auth/Security**: PQueue → Mutex migration, hosted device 99 support, reachout timelock
-6. **Media**: Optimasi download, full aspect ratio profile pictures, status/broadcast CDN handle
+6. **Media**: Download optimization, full aspect ratio profile pictures, status/broadcast CDN handle
 7. **History**: Stream inflate, LID/PN mappings, root participant hoist
 8. **App-State Sync**: Pause tracking, blocked collection retry, version repair
-9. **Status & Group Status**: Full support untuk WhatsApp Stories
+9. **Status & Group Status**: Full support for WhatsApp Stories
 10. **Interactive Messages**: Buttons, lists, sections, native flow
