@@ -1,4 +1,4 @@
-# Feature.md — Baileys v10 Wileys Enterprise Changes
+# Feature.md — Baileys v10 Changes
 
 > Based on `git diff` between master commit and the patched version (custom-baileys v10).
 
